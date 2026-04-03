@@ -1,17 +1,29 @@
 from rest_framework import serializers
-from .models import Category,SubCategory,Lesson
+from .models import Category, SubCategory, Lesson, ContactMessage
+
 
 class LessonSerializer(serializers.ModelSerializer):
-    categoryName = serializers.CharField(source="categoryID.categoryName",read_only = True)
-    SubCategoryName = serializers.CharField(source="subCategoryID.subCategoryName",read_only = True)
-    
+    categoryName = serializers.CharField(source="categoryID.categoryName", read_only=True)
+    SubCategoryName = serializers.CharField(source="subCategoryID.subCategoryName", read_only=True)
+
     class Meta:
         model = Lesson
-        fields = ["id","categoryID","categoryName","subCategoryID","SubCategoryName","lessonName","lessonDescription","lessonImage","lessonDate","lessonPdf"]
+        fields = [
+            "id",
+            "categoryID",
+            "categoryName",
+            "subCategoryID",
+            "SubCategoryName",
+            "lessonName",
+            "lessonDescription",
+            "lessonImage",
+            "lessonDate",
+            "lessonPdf",
+        ]
+
 
 class SubCategorySerializer(serializers.ModelSerializer):
-    categoryName = serializers.CharField(source="categoryID.categoryName",read_only = True)
-    lessons = LessonSerializer(many=True,read_only=True)
+    categoryName = serializers.CharField(source="categoryID.categoryName", read_only=True)
 
     class Meta:
         model = SubCategory
@@ -22,12 +34,10 @@ class SubCategorySerializer(serializers.ModelSerializer):
             "subCategoryName",
             "subCategoryImage",
             "created_at",
-            "lessons"
         ]
 
-class CategorySerializerw(serializers.ModelSerializer):
-    subcategory = SubCategorySerializer(many=True,read_only = True)
 
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = [
@@ -35,5 +45,19 @@ class CategorySerializerw(serializers.ModelSerializer):
             "categoryName",
             "categoryImage",
             "created_at",
-            "subcategory"
         ]
+
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = [
+            "id",
+            "full_name",
+            "email",
+            "subject",
+            "message",
+            "created_at",
+            "is_read",
+        ]
+        read_only_fields = ["id", "created_at", "is_read"]

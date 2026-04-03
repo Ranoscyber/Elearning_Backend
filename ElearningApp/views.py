@@ -1,42 +1,51 @@
-from django.shortcuts import render
+from rest_framework import generics
+from  rest_framework.pagination import PageNumberPagination
+from .models import *
+from .serializers import *
 
-# Create your views here.
-from rest_framework import viewsets,generics
-from .models import Category,SubCategory,Lesson
-from .serializers import LessonSerializer,CategorySerializerw,SubCategorySerializer
+class LessonPagination(PageNumberPagination):
+    page_size = 8
+    page_size_query_param = "page_size"
+    max_page_size = 20
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all().order_by("-id")
-    serializer_class = CategorySerializerw
+    serializer_class = CategorySerializer
 
-class SubCategoryViewSet(viewsets.ModelViewSet):
-    queryset = SubCategory.objects.all().order_by("-id")
+class SubCategoryListAPIView(generics.ListAPIView):
     serializer_class = SubCategorySerializer
 
-class LessonViewSet(viewsets.ModelViewSet):
-    queryset = Lesson.objects.all().order_by("-id")
+    def get_queryset(self):
+        queryset = SubCategory.objects.select_related("categoryID").order_by("-id")
+        category_id = self.request.query_params.get("category")
+
+        if category_id:
+            queryset = queryset.filter(categoryID_id = category_id)
+
+        return queryset
+    
+class LessonListAPIView(generics.ListAPIView):
+    serializer_class = LessonSerializer
+    pagination_class = LessonPagination
+
+    def get_queryset(self):
+        queryset = Lesson.objects.select_related("categoryID", "subCategoryID").order_by("-id")
+
+        category_id = self.request.query_params.get("category")
+        subcategory_id = self.request.query_params.get("subcategory")
+
+        if category_id:
+            queryset = queryset.filter(categoryID_id=category_id)
+
+        if subcategory_id:
+            queryset = queryset.filter(subCategoryID_id=subcategory_id)
+
+        return queryset
+
+class LessonDetailAPIView(generics.ListAPIView):
+    queryset = Lesson.objects.select_related("categoryID", "subCategoryID").all()
     serializer_class = LessonSerializer
 
-# GET /api/categories/<category_id>/subcategories/
-
-# class SubCategoriesByCategory(generics.ListAPIView):
-#     serializer_class = SubCategorySerializer
-
-#     def get_queryset(self):
-#         category_id = self.kwargs["category_id"] #Get Id form param
-#         return SubCategory.objects.all().filter(categoryID_id = category_id).order_by("-id")
-    
-
-# #
-
-# class LessonBySubCategory(generics.ListAPIView):
-#     serializer_class = LessonSerializer
-
-#     def get_queryset(self):
-#         category_id = self.kwargs["category_id"]
-#         subcategory_id = self.kwargs["subcategory_id"]
-
-#         return Lesson.objects.all().filter(
-#             categoryID_id = category_id,
-#             subcategoryID_id = subcategory_id
-#         ).order_by("-id")
+class ContactMessageCreateAPIView(generics.CreateAPIView):
+    queryset = ContactMessage.objects.all()
+    serializer_class = ContactMessageSerializer

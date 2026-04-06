@@ -14,8 +14,3 @@ urlpatterns = [
     path("api/lessons/<int:pk>/", LessonDetailAPIView.as_view(), name="lesson-detail"),
     path("api/contact-messages/", ContactMessageCreateAPIView.as_view(), name="contact-message-create"),
 ]
-
-# /api/categories/
-# /api/subcategories/?category=1
-# /api/lessons/?page=1&page_size=8
-# /api/lessons/2/

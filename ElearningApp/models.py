@@ -59,3 +59,15 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.full_name} - {self.subject}"
+
+
+class CustomWebsite(models.Model):
+    LogoName = models.CharField(max_length=200)
+    TopDescription = models.CharField(max_length=200)
+    BodyTop = models.CharField(max_length=150)
+    BodyMid = models.CharField(max_length=150)
+    BodyBottom = models.CharField(max_length=200)
+    ImageBody = models.ImageField(upload_to='image/Hero')
+
+    def __str__(self):
+        return self.LogoName

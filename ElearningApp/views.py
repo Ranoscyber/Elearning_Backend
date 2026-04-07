@@ -1,11 +1,12 @@
 from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
-from .models import Category, SubCategory, Lesson, ContactMessage
+from .models import Category, SubCategory, Lesson, ContactMessage,CustomWebsite
 from .serializers import (
     CategorySerializer,
     SubCategorySerializer,
     LessonSerializer,
     ContactMessageSerializer,
+    CustomWebsiteSerializer
 )
 
 
@@ -60,3 +61,9 @@ class LessonDetailAPIView(generics.RetrieveAPIView):
 class ContactMessageCreateAPIView(generics.CreateAPIView):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
+
+class CustomWebsiteListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = CustomWebsiteSerializer
+    def get_queryset(self):
+        last_obj = CustomWebsite.objects.order_by('-id')[:1]
+        return last_obj

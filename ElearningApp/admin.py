@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, SubCategory, Lesson, ContactMessage
+from .models import Category, SubCategory, Lesson, ContactMessage,CustomWebsite
 
 
 @admin.register(Category)
@@ -22,3 +22,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ["id", "full_name", "email", "subject", "is_read", "created_at"]
     list_filter = ["is_read", "created_at"]
     search_fields = ["full_name", "email", "subject", "message"]
+
+@admin.register(CustomWebsite)
+class CustomWebsiteAdmin(admin.ModelAdmin):
+    list_display = ["LogoName"]

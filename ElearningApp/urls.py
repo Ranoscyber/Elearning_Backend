@@ -5,6 +5,7 @@ from .views import (
     LessonListAPIView,
     LessonDetailAPIView,
     ContactMessageCreateAPIView,
+    CustomWebsiteListCreateAPIView,
 )
 
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     path("api/lessons/", LessonListAPIView.as_view(), name="lesson-list"),
     path("api/lessons/<int:pk>/", LessonDetailAPIView.as_view(), name="lesson-detail"),
     path("api/contact-messages/", ContactMessageCreateAPIView.as_view(), name="contact-message-create"),
+    path("api/customwebsite/",CustomWebsiteListCreateAPIView.as_view(),name="customwebsite")
 ]

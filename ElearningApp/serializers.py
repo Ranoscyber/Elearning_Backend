@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, SubCategory, Lesson, ContactMessage
+from .models import Category, SubCategory, Lesson, ContactMessage,CustomWebsite
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -61,3 +61,8 @@ class ContactMessageSerializer(serializers.ModelSerializer):
             "is_read",
         ]
         read_only_fields = ["id", "created_at", "is_read"]
+
+class CustomWebsiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomWebsite
+        fields = "__all__"
